@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Removes rows written by previous load runs so every run starts from the
 # same database state. Only touches load-test users (users*/rate* prefixes);
-# the load-* areas are kept and reused.
+# the k6-* areas are kept and reused.
 set -euo pipefail
 
 docker exec location-tracking-postgres psql -U location -d location_tracking -q -c "
