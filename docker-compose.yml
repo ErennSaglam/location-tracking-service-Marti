@@ -1,0 +1,25 @@
+# Fixed project name so the stack (and its volume) does not depend on the
+# directory the repository is cloned into.
+name: marti-location-tracking
+
+services:
+  postgres:
+    # Multi-arch build of the PostGIS image (native on Apple Silicon and amd64).
+    image: imresamu/postgis:17-3.5
+    container_name: location-tracking-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-location}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-location}
+      POSTGRES_DB: ${DB_NAME:-location_tracking}
+    ports:
+      - '${DB_PORT:-5440}:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:

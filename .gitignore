@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+.env
+.env.*
+!.env.example
+
+.DS_Store
+*.log
+.claude/
+
+# k6 writes its summaries here; the folder itself ships with the repo.
+load/results/*
+!load/results/.gitkeep
