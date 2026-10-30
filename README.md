@@ -60,7 +60,7 @@ README boyunca geçen kavramlar. Bilinenleri atlayabilirsiniz.
 | **Transaction** | Birden fazla veritabanı işleminin tek bir bütün olarak yapılması: ya hepsi başarılı olur ya da hiçbiri uygulanmaz. Yarım kalmış kayıt oluşmaz. |
 | **Index** | Veritabanının bir tabloda bütün satırları tek tek okumadan aradığını bulmasını sağlayan yapı; kitabın sonundaki dizin gibi. |
 | **Swagger** | Tarayıcıdan API'yi görüp deneyebileceğiniz arayüz. Her endpoint'in ne aldığını, ne döndürdüğünü ve hangi hataları verebileceğini gösterir. |
-| **Docker / container / image** | Docker, bir programı (burada PostgreSQL'i) bilgisayarınıza kurmadan kendi yalıtılmış kutusu içinde çalıştırır. Çalışan kutuya **container**, kutunun indirilen hazır kalıbına **image** denir. **Docker Compose**, birden fazla container'ı tek bir ayar dosyasıyla (`docker-compose.yml`) başlatıp durdurmayı sağlar. |
+| **Docker / container / image** | Docker, bir programı (burada PostgreSQL'i) bilgisayarınıza kurmadan, bilgisayarın geri kalanından ayrı bir ortamda çalıştırır. Bu ortamda çalışan programa **container**, container'ın oluşturulduğu ve internetten indirilen hazır pakete **image** denir. **Docker Compose**, birden fazla container'ı tek bir ayar dosyasıyla (`docker-compose.yml`) başlatıp durdurmayı sağlar. |
 | **Port** | Bir programın bilgisayarda dinlediği "kapı numarası". Uygulama 3000, veritabanı 5440 numaralı portu kullanır. Aynı portu iki program aynı anda kullanamaz. |
 | **Canlı ortam (production)** | Uygulamanın gerçek kullanıcılara hizmet verdiği ortam; geliştiricinin kendi bilgisayarının tersi. |
 | **k6** | Yük testi aracı: binlerce kullanıcı aynı anda istek gönderiyormuş gibi trafik üretip sistemin nasıl davrandığını ölçer ([TESTING.md, bölüm 2](TESTING.md#2-performans-testi-k6)). |
@@ -117,8 +117,8 @@ Veritabanı versiyonu: proje **PostgreSQL 17 + PostGIS 3.5** ile geliştirildi v
 **1. Projeyi indirin ve bağımlılıkları kurun**
 
 ```bash
-git clone https://github.com/ErennSaglam/marti-location-tracking.git
-cd marti-location-tracking
+git clone https://github.com/ErennSaglam/location-tracking-service-Marti.git
+cd location-tracking-service-Marti
 npm ci
 ```
 
@@ -557,7 +557,7 @@ Adresi tırnak (`'...'`) içinde yazın. `?` ve `&` karakterleri tırnaksız yaz
 
 Servisin çalışıp çalışmadığını ve veritabanına bağlanıp bağlanamadığını gösterir.
 
-Uygulamayı çalıştıran kişi terminalde başlangıç mesajını görür; dışarıdan bakan biri (başka bir geliştirici, test eden kişi) bu terminali göremez. API'nin ayakta olup olmadığını bu adrese istek göndererek anlar.
+Uygulamayı çalıştıran kişi terminalde başlangıç mesajını görür; dışarıdan bakan biri (başka bir geliştirici, test eden kişi) bu terminali göremez. API'nin çalışıp çalışmadığını bu adrese istek göndererek anlar.
 
 **Nasıl çalışır:** İstek gelince uygulama veritabanına en basit sorguyu (`SELECT 1`, "bana 1 döndür") gönderir. Veritabanı 1 saniye içinde cevap verirse `200`, vermezse `503` döner. Uygulamanın kendisi kapalıysa istek hiç cevap alamaz.
 
@@ -764,8 +764,8 @@ Projede üç tür test var. Nasıl çalıştırıldıkları, ne doğruladıklar�
 
 | Tercih | Neden |
 |---|---|
-| **PostgreSQL + PostGIS** | Task PostgreSQL istiyor. "Nokta hangi polygon'un içinde" hesabını PostGIS hem doğru (geometri kuralları, delikler, sınırlar) hem hızlı (coğrafi index) yapar; bu hesabı uygulama kodunda yazmak hem yavaş hem hataya açık olurdu. |
-| **TypeORM** | Task TypeORM veya Prisma istiyor. Tablolar, kayıt/okuma işlemleri ve migration'lar için TypeORM kullanıldı. Saniyede binlerce kez çalışan konum işleme akışında ise SQL doğrudan (parametreli olarak) yazıldı: böylece kilitleme ile alan sorgusu tek sorguda birleştirilip veritabanına giden sorgu sayısı azaltıldı. |
+| **PostgreSQL + PostGIS** | Case metni PostgreSQL istiyor. "Nokta hangi polygon'un içinde" hesabını PostGIS hem doğru (geometri kuralları, delikler, sınırlar) hem hızlı (coğrafi index) yapar; bu hesabı uygulama kodunda yazmak hem yavaş hem hataya açık olurdu. |
+| **TypeORM** | Case metni TypeORM veya Prisma istiyor. Tablolar, kayıt/okuma işlemleri ve migration'lar için TypeORM kullanıldı. Saniyede binlerce kez çalışan konum işleme akışında ise SQL doğrudan (parametreli olarak) yazıldı: böylece kilitleme ile alan sorgusu tek sorguda birleştirilip veritabanına giden sorgu sayısı azaltıldı. |
 | **Vitest** (test aracı) | NestJS 12 ile oluşturulan ES Module projelerinin varsayılan test aracı ([NestJS migration guide](https://docs.nestjs.com/migration-guide)). Jest bu projede ancak çok yeni Node.js sürümlerinde (24.9+) çalışabiliyor. |
 | **Testcontainers** | Testler sahte değil gerçek PostGIS üzerinde çalışsın diye; coğrafi davranış sahte (mock) bir veritabanıyla doğrulanamaz. |
 | **Docker Compose** | Veritabanını tek komutla, herkeste aynı versiyonla başlatmak için. |
@@ -779,14 +779,14 @@ Projede üç tür test var. Nasıl çalıştırıldıkları, ne doğruladıklar�
 
 ## 9. Varsayımlar
 
-Task'ta açıkça belirtilmeyen konularda yapılan varsayımlar:
+Case metninde açıkça belirtilmeyen konularda yapılan varsayımlar:
 
 - **Zaman, telefonun gönderdiği zamandır.** Sıralama ve giriş anı için `timestamp` kullanılır ve gönderilmesi zorunludur. Sunucunun saati kullanılmaz, çünkü gecikmeli veya tekrar gönderilen isteklerde konumun ölçüldüğü anı değil, sunucuya ulaştığı anı gösterir; bu da sıralamayı ve tekrar tespitini bozar. Saat dilimi zorunludur; saat dilimi olmayan bir zamanın hangi saat dilimine ait olduğu belirsizdir.
 - **Zaman, şu andan en fazla 60 saniye ileride olabilir.** Telefonun saati biraz ileri olabileceği için bu kadarına izin verilir. Çok ileri bir zaman kabul edilseydi, kullanıcının sonraki tüm gerçek konumları "eski" sayılıp yok sayılırdı.
-- **Sadece giriş kaydedilir.** Task giriş kaydı istiyor; çıkış ayrıca kaydedilmez. Çıkış bilgisi kullanıcının durum satırında tutulur ve tekrar girişin doğru tespit edilmesini sağlar.
+- **Sadece giriş kaydedilir.** Case metni giriş kaydı istiyor; çıkış ayrıca kaydedilmez. Çıkış bilgisi kullanıcının durum satırında tutulur ve tekrar girişin doğru tespit edilmesini sağlar.
 - **İlk konum da giriş sayılır.** Kullanıcının ilk gönderdiği konum bir alanın içindeyse o alan için giriş kaydı oluşur.
 - **Bir kullanıcı aynı anda birden fazla alanda olabilir.** İç içe / örtüşen alanların her birine giriş ayrı kaydedilir.
-- **Alanlar sonradan değişmez.** Alan güncelleme / silme endpoint'i yok (task istemiyor).
+- **Alanlar sonradan değişmez.** Alan güncelleme / silme endpoint'i yok (case metni istemiyor).
 - **`userId` metin olarak gelir ve güvenilir kabul edilir.** Kimlik doğrulama kapsam dışı ([bölüm 10](#10-kapsam-dışı-ve-geliştirme-yolu)).
 - **Alan şekli sadece `Polygon`'dur.** Birden fazla parçadan oluşan alanlar (`MultiPolygon`) desteklenmez; gerekirse ayrı alanlar olarak tanımlanabilir.
 

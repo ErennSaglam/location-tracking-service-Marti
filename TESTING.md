@@ -56,10 +56,10 @@ Bu dokümanda geçen terimler. Bilinenleri atlayabilirsiniz. Docker, container, 
 
 | Terim | Anlamı |
 |---|---|
-| **Sorgu / gidip gelme** | Uygulamanın veritabanına gönderdiği her komut. Uygulama komutu gönderir ve cevabı bekler. Her sorgu bir gidip gelme demektir. |
+| **Sorgu** | Uygulamanın veritabanına gönderdiği her komut. Uygulama komutu gönderir ve cevap gelene kadar bekler. |
 | **Satır kilidi** | Veritabanında bir satırı geçici olarak kilitlemek. Aynı satırı kilitlemek isteyen ikinci istek, ilki bitene kadar bekler. Bu projede her kullanıcının durum satırı, konum işlenirken kilitlenir. |
 | **Bağlantı havuzu** (connection pool) | Uygulamanın veritabanına önceden açtığı bağlantılar. Bu projede 20 bağlantı var. Her istek havuzdan bir bağlantı alır, işi bitince geri verir. 20 bağlantının hepsi doluysa yeni istek sırada bekler. |
-| **Event loop** (ana iş hattı) | Node.js gelen işleri tek bir hatta sırayla işler. Bu hat çok doluysa işler sırada bekler ve uygulama yavaşlar. |
+| **Event loop** | Node.js'in gelen işleri tek tek ve sırayla işlediği yapı. Çok fazla iş birikirse işler sırada bekler ve uygulama yavaşlar. |
 | **Index** | Veritabanının bütün tabloyu okumadan aradığını bulmasını sağlayan yapı. Kitabın sonundaki dizine benzer. |
 | **REINDEX** | Index'i baştan oluşturan PostgreSQL komutu. Silinen kayıtların index'te bıraktığı boş yeri temizler. |
 | **Checkpoint** | PostgreSQL değişiklikleri önce bellekte tutar, belirli aralıklarla toplu olarak diske yazar. Bu toplu yazmaya checkpoint denir. Checkpoint sırasında veritabanı kısa süre yavaşlayabilir. |
@@ -132,7 +132,7 @@ Testlerde üç alan kullanılır:
 
 ### 2.1 Neden yük testi yaptık
 
-Task, kullanıcı sayısının ve trafiğin zamanla çok artabileceğini söylüyor. "Sistem bu yükü kaldırır" demek yerine bunu ölçtük.
+Case metni, kullanıcı sayısının ve trafiğin zamanla çok artabileceğini söylüyor. "Sistem bu yükü kaldırır" demek yerine bunu ölçtük.
 
 Hedefi şöyle hesapladık: Her kullanıcı 5 saniyede bir konum gönderirse, 10.000 aktif kullanıcı saniyede 2.000 istek demektir (10.000 / 5 = 2.000).
 
